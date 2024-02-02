@@ -1,12 +1,7 @@
 import "../index.css";
 import { initialCards } from "./cards.js";
 import { createCard, deleteCard, likeCard } from "./card.js";
-import {
-  openModal,
-  closeModal,
-  handleCloseByOverlay,
-  handleCloseByClick,
-} from "./modal.js";
+import { openModal, closeModal, handleCloseByOverlay } from "./modal.js";
 
 //Темплейт карточки
 export const cardTemplate = document.querySelector("#card-template").content;
@@ -24,6 +19,7 @@ const jobInput = document.querySelector(".popup__input_type_description");
 const addButton = document.querySelector(".profile__add-button");
 const popupNewCard = document.querySelector(".popup_type_new-card");
 const formNewCard = document.forms["new-place"];
+const popupList = document.querySelectorAll(".popup");
 const placeName = document.querySelector(".popup__input_type_card-name");
 const imageLink = document.querySelector(".popup__input_type_url");
 const imageOpen = document.querySelector(".popup__image");
@@ -32,7 +28,9 @@ const popupTypeImage = document.querySelector(".popup_type_image");
 
 // Вывести карточки на страницу
 initialCards.forEach(({ link, name }) => {
-  cardsContainer.append(createCard(link, name, deleteCard, likeCard));
+  cardsContainer.append(
+    createCard(link, name, deleteCard, likeCard, openCardImage)
+  );
 });
 
 // Открыть форму редактирования
@@ -59,11 +57,7 @@ function handleProfileFormSubmit(evt) {
 }
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
-popupTypeEdit.addEventListener("click", (evt) => {
-  handleCloseByOverlay(evt);
-  handleCloseByClick(evt);
-});
-
+popupTypeEdit.addEventListener("click", handleCloseByOverlay);
 // Функция сохранения новой карточки
 function handleNewCardSubmit(evt) {
   evt.preventDefault();
@@ -71,7 +65,7 @@ function handleNewCardSubmit(evt) {
   const cardTitle = placeName.value;
 
   cardsContainer.prepend(
-    createCard(cardImage, cardTitle, deleteCard, likeCard)
+    createCard(cardImage, cardTitle, deleteCard, likeCard, openCardImage)
   );
 
   formNewCard.reset();
@@ -79,10 +73,7 @@ function handleNewCardSubmit(evt) {
 }
 
 formNewCard.addEventListener("submit", handleNewCardSubmit);
-popupNewCard.addEventListener("click", (evt) => {
-  handleCloseByOverlay(evt);
-  handleCloseByClick(evt);
-});
+popupNewCard.addEventListener("click", handleCloseByOverlay);
 
 // Функция клик по изображению
 export function openCardImage(link, name) {
@@ -91,7 +82,12 @@ export function openCardImage(link, name) {
   imageOpen.alt = "фото " + name;
   imagePopupCaption.textContent = name;
 }
-popupTypeImage.addEventListener("click", (evt) => {
-  handleCloseByOverlay(evt);
-  handleCloseByClick(evt);
+popupTypeImage.addEventListener("click", handleCloseByOverlay);
+
+// Найти все попапы и добавить обработчики событий к кнопкам закрытия
+popupList.forEach((popup) => {
+  const closeButton = popup.querySelector(".popup__close");
+  if (closeButton) {
+    closeButton.addEventListener("click", () => closeModal(popup));
+  }
 });

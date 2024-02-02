@@ -1,5 +1,5 @@
 //  Экспортируемые функции
-export { openModal, closeModal, handleCloseByOverlay, handleCloseByClick };
+export { openModal, closeModal, handleCloseByOverlay };
 
 // Функция открытия popup
 function openModal(popup) {
@@ -26,16 +26,5 @@ function handleCloseByEsc(evt) {
 function handleCloseByOverlay(evt) {
   if (evt.target === evt.currentTarget) {
     closeModal(evt.target);
-  }
-}
-
-function handleCloseByClick(evt) {
-  const openedPopup = document.querySelector(".popup_is-opened");
-  if (
-    openedPopup &&
-    (evt.target.classList.contains("popup__close") ||
-      evt.target.classList.contains("popup"))
-  ) {
-    closeModal(openedPopup);
   }
 }

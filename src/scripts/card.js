@@ -1,6 +1,6 @@
 import { cardTemplate, openCardImage } from "./index.js";
 // Функция создания карточки
-function createCard(cardImage, cardTitle, deleteCard, likeCard) {
+function createCard(cardImage, cardTitle, deleteCard, likeCard, openCardImage) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImageElement = cardElement.querySelector(".card__image");
   cardImageElement.src = cardImage;
