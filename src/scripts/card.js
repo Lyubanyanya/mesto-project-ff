@@ -28,6 +28,12 @@ const createCard = (
   }
 
   likeCount.textContent = cardTitle.likes.length;
+  cardTitle.likes.some((like) => {
+    if (like._id === userId) {
+      likeButton.classList.add("card__like-button_is-active");
+    }
+  });
+  
 
   likeButton.addEventListener("click", (evt) =>
     likeCard(evt, cardTitle._id, likeCount)

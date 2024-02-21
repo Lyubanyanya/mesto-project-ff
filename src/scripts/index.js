@@ -4,7 +4,6 @@ import { openModal, closeModal, handleCloseByOverlay } from "./modal.js";
 import {
   clearValidation,
   enableValidation,
-  validationConfig,
   toggleButtonState,
 } from "./validation.js";
 import {
@@ -14,6 +13,15 @@ import {
   patchAvatar,
   addNewCard,
 } from "./api.js";
+
+ const validationConfig = {
+  formSelector: "popup__form",
+  inputSelector: "popup__input",
+  submitButtonSelector: "popup__button",
+  inactiveButtonClass: "popup__button_inactive",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup-error_message",
+};
 
 // Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
@@ -93,8 +101,7 @@ buttonEdit.addEventListener("click", () => {
 
 // Открыть форму редактирования с фото
 addButton.addEventListener("click", () => {
-  clearValidation(popupTypeEdit, validationConfig);
-  toggleButtonState(editProfileForm, validationConfig);
+  toggleButtonState(formNewCard, validationConfig);
   openModal(popupNewCard);
 });
 
@@ -119,7 +126,7 @@ const handleProfileFormSubmit = (evt) => {
 };
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
-popupTypeEdit.addEventListener("click", handleCloseByOverlay);
+popupTypeEdit.addEventListener("mousedown", handleCloseByOverlay);
 
 const handleNewCardSubmit = (evt) => {
   evt.preventDefault();
@@ -149,7 +156,7 @@ const handleNewCardSubmit = (evt) => {
 };
 
 formNewCard.addEventListener("submit", handleNewCardSubmit);
-popupNewCard.addEventListener("click", handleCloseByOverlay);
+popupNewCard.addEventListener("mousedown", handleCloseByOverlay);
 
 // Функция клик по изображению
 function openCardImage(link, name) {
@@ -159,7 +166,7 @@ function openCardImage(link, name) {
   imagePopupCaption.textContent = name;
 }
 
-popupTypeImage.addEventListener("click", handleCloseByOverlay);
+popupTypeImage.addEventListener("mousedown", handleCloseByOverlay);
 
 // Найти все попапы и добавить обработчики событий к кнопкам закрытия
 popupList.forEach((popup) => {
@@ -170,12 +177,11 @@ popupList.forEach((popup) => {
 });
 
 popupAvatarEditOpen.addEventListener("click", () => {
-  clearValidation(formEdit, validationConfig);
+  toggleButtonState(popupAvatarEdit, validationConfig);
   openModal(popupAvatarEdit);
-  formAvatar.reset();
 });
 
-popupAvatarEdit.addEventListener("click", handleCloseByOverlay);
+popupAvatarEdit.addEventListener("mousedown", handleCloseByOverlay);
 
 const handleFormEditAvatar = (evt) => {
   evt.preventDefault();
@@ -186,15 +192,17 @@ const handleFormEditAvatar = (evt) => {
     .then((res) => {
       avatar.style.backgroundImage = `url('${res.avatar}')`;
       closeModal(popupAvatarEdit);
+      formAvatar.reset();
     })
     .catch((error) => {
       console.log(error);
     })
     .finally(() => {
-      isLoading(avatarFormSubmitButton, false);
+      isLoading(avatarFormSubmitButton, false); 
     });
 };
 
 popupAvatarEdit.addEventListener("submit", handleFormEditAvatar);
+
 
 enableValidation(validationConfig);

@@ -1,6 +1,3 @@
-//  Экспортируемые функции
-export { openModal, closeModal, handleCloseByOverlay };
-
 // Функция открытия popup
 function openModal(popup) {
   popup.classList.add("popup_is-opened");
@@ -28,3 +25,6 @@ function handleCloseByOverlay(evt) {
     closeModal(evt.target);
   }
 }
+
+//  Экспортируемые функции
+export { openModal, closeModal, handleCloseByOverlay };
